@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% if page.title %} {{ page.title }} | {% endif %} {{site.title}}</title>
+    <!--[if IE]>
+      <script src="/js/html5.js" />
+    <![endif]-->
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" media="screen, projection" charset="utf-8" href="/css/screen.css" />
+    <link rel="stylesheet" type="text/css" media="screen, projection" charset="utf-8" href="/css/pygments.css" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml" />
+  </head>
+  <body>
+    <div id="wrap" class="container_12">
+
+    <header class="grid_12 alpha omega">
+    {% if site.title %}
+      <h1><a href="{{site.url}}">{{site.title}}</a></h1>
+    {% endif %}
+    </header>
+
+    <div class="clear"></div>
+
+    <section class="grid_8 alpha omega">
+    {{ content }}
+    </section>
+
+    <div class="clear"></div>
+    <footer>
+      <div class="grid_4 alpha">
+        <p>
+          <a href="http://github.com/couchrest/couchrest">couchrest on github</a><br />
+          <a href="http://github.com/couchrest/couchrest_model">couchrest model on github</a>
+        </p>
+      </div>
+      <div class="grid_4">
+      </div>
+      <div class="grid_4 omega">
+        <!--
+        <a href="{{site.url}}/atom.xml" class="noul">
+          <img src="/images/rss.png" alt="Subscribe to RSS Feed" />
+        </a>
+        -->
+      </div>
+    </footer>
+    <div class="clear"></div>
+    </div><!-- .container_12 -->
+  </body>
+</html>
+

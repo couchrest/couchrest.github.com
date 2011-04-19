@@ -1,0 +1,141 @@
+@import url("960gs/960.css");
+
+/* http://www.levien.com/type/myfonts/inconsolata.html */
+@font-face 
+{
+  font-family: "inconsolata";
+  src: url("/fonts/Inconsolata.otf");
+}                                    
+
+@font-face
+{
+  font-family: "droid sans";
+  src: url("/fonts/DroidSans.ttf");
+}
+@font-face
+{
+  font-family: "droid sans bold";
+  src: url("/fonts/DroidSans-Bold.ttf");
+}
+body
+{
+  color:#333;
+  font-family: helvetica, arial, sans-serif;
+  font-size:87.5%;   /* 16px * 0.875 = 14px */
+  line-height: 137.5%; /* 16px * 1.375  = 22px */
+}
+a
+{
+  text-decoration:none;
+  border-bottom: solid 1px #3030a2;
+}
+a:hover
+{  
+  text-decoration:none;
+  border-bottom: 0px;
+}
+
+a:visited{
+  color: #000;
+  border-bottom: solid 1px #ccc;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+  color: #222;
+}
+h1, h2, h3
+{
+  font-family: helvetica, arial, sans-serif;
+}
+
+h4, h5, h6
+{
+  color: #666; 
+  font-family: helvetica, arial, sans-serif;
+}
+
+h1
+{
+  font-size: 150.0%;
+}
+h2
+{
+  font-size:  137.5%;
+}
+h3 
+{
+  font-size: 125.0%;
+}
+h4
+{
+  font-size: 112.5%;
+}
+h5, h6{
+  font-size: 100%;
+}
+
+pre,code
+{
+    font-family: "inconsolata", monospace;
+    /* font-size: 1.142em; */
+}
+
+.noul
+{
+  border-bottom: 0px;
+  text-decoration:none;
+}
+
+#header, #footer
+{
+  display: block;
+  padding: 1em 0;
+}
+
+
+#header h1
+{
+  font-size:1.142em;
+}
+
+#header h1 a, #header h1 a:visited
+{
+  color:#a23030;
+  text-decoration:none;
+  border-bottom: none;
+}
+#header h2
+{
+  font-size:1em;
+  color:#aaa;
+}
+#footer{
+  margin-top:1em;
+}
+
+ul.posts li
+{
+  list-style-type:none;
+  line-height: 2em;
+}
+
+#allposts li span 
+{
+  color:#999;
+  float:right;
+}
+p.postmeta
+{
+  color: #aaa;
+  font-size: 87.5%;
+  margin: 0px;
+  padding: 0px;
+}
+
+div.post
+{
+  border-bottom: solid 1px #ccc;
+  padding-bottom: 2em;
+  margin-bottom: 2em;
+}

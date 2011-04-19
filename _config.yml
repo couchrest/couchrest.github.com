@@ -1,0 +1,19 @@
+# Jekyll Configuration
+
+url: http://couchrest.info
+title: CouchRest Model
+description: Support site for the CouchRest Ruby library allowing you easy access and modelling with ActiveModel support for your CouchDB databases.
+author: Sam Lown
+analytics_id: # Google Analytics ID : UA-xxx-xxx
+
+auto: false
+lsi: false
+pygments: true
+server_port: 4000
+markdown: maruku
+
+maruku:
+  use_tex: false
+  use_divs: false
+  png_dir: images/tex
+  png_url: /images/tex
