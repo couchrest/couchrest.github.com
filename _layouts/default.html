@@ -16,14 +16,67 @@
 
     <header class="grid_12 alpha omega">
     {% if site.title %}
-      <h1><a href="{{site.url}}">{{site.title}}</a></h1>
+      <h1><a href="{{site.url}}">CouchRest and CouchRest Model</a></h1>
     {% endif %}
     </header>
 
     <div class="clear"></div>
 
+    <nav class="grid_3 alpha">
+      <h1>Menu</h1>
+      <ul>
+        <li><a href="/">Introduction</a></li>
+        <li>
+          <a href="/couchrest/index.html">CouchRest</a>
+          <br />
+          <ul>
+            <li><a href="/couchrest/servers.html">Servers</a></li>
+            <li><a href="/couchrest/databases.html">Databases</a></li>
+            <li><a href="/couchrest/designs.html">Designs</a></li>
+            <li><a href="/couchrest/rest_api.html">Rest API</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="/model/index.html">CouchRest Model</a>
+          <br />
+          <ul>
+            <li><a href="/model/connecting.html">Connecting</a></li>
+            <li><a href="/model/properties.html">Properties</a></li>
+            <li><a href="/model/persistance.html">Persistance</a></li>
+            <li><a href="/model/casted_models.html">Casted Models</a></li>
+            <li><a href="/model/dirty_tracking.html">Dirty Tracking</a></li>
+            <li><a href="/model/associations.html">Associations</a></li>
+            <li><a href="/model/validations.html">Validations</a></li>
+            <li><a href="/model/callbacks.html">Callbacks</a></li>
+            <li><a href="/model/designs.html">Designs</a></li>
+            <li><a href="/model/view_objects.html">View Objects</a></li>
+            <li><a href="/model/proxying.html">Proxying</a></li>
+            <li><a href="/model/configuring.html">Configuring</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
     <section class="grid_8 alpha omega">
-    {{ content }}
+      {{ content }}
+
+      {% if page.no_comments != true and page.id != empty %}
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            var disqus_shortname = 'couchrest';
+            // The following are highly recommended additional parameters. Remove the slashes in front to use.
+            var disqus_identifier = '{{ page.id }}';
+            // var disqus_url = 'http://example.com/permalink-to-page.html';
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+      {% endif %}
     </section>
 
     <div class="clear"></div>

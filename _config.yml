@@ -1,5 +1,5 @@
 # Jekyll Configuration
-
+layout: default
 url: http://couchrest.info
 title: CouchRest Model
 description: Support site for the CouchRest Ruby library allowing you easy access and modelling with ActiveModel support for your CouchDB databases.
