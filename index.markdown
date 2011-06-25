@@ -12,3 +12,7 @@ To get started, you'll probably want to have a look at the [couchrest model intr
 
 *NOTE:* This documentation is based on the 1.1.0 release of couchrest and couchrest model made on the 25 of June 2011.
 
+## Contributing
+
+Please help us document couchrest model by cloning and contributing to the [couchrest.info repository](https://github.com/couchrest/couchrest.github.com).
+
