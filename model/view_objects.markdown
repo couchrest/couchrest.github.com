@@ -4,71 +4,51 @@ title: Views and View Objects
 id: model_view_objects
 ---
 
-# Views and View Objects
+# Views
 
 CouchDB views can be quite difficult to get grips with at first as they are quite different from what you'd expect with SQL queries in a normal Relational Database. Checkout some of the [CouchDB documentation on views](http://wiki.apache.org/couchdb/Introduction_to_CouchDB_views) to get to grips with the basics. The key is to remember that CouchDB will only generate indexes from which you can extract consecutive rows of data, filtering other than between two points in a data set is not possible.
 
-CouchRest Model has great support for views, and since version 1.1.0 we added support for a View objects that make accessing your data even easier. 
-
-## The Old Way
-
-Here's an example of adding a view to our Cat class:
-
-{% highlight ruby %}
-class Cat < CouchRest::Model::Base
-  property :name, String
-  property :toys, [CatToy]
-
-  view_by :name
-end
-{% endhighlight %}
-
-The `view_by` method will create a view in the Cat's design document called "by_name". This will allow searches to be made for the Cat's name attribute. Calling `Cat.by_name` will send a query of to the database and return an array of all the Cat objects available. Internally, a map function is generated automatically and stored in CouchDB's design document for the current model, it'll look something like the following:
-
-{% highlight javascript %}
-function(doc) {
-  if (doc['couchrest-type'] == 'Cat' && doc['name']) {
-    emit(doc.name, null);
-  }
-}
-{% endhighlight %}
-
-By default, a special view called `all` is created and added to all couchrest models that allows you access to all the documents in the database that match the model. By default, these will be ordered by each documents id field.
-
-It is also possible to create views of multiple keys, for example:
-
-{% highlight ruby %}
-view_by :birthday, :name
-{% endhighlight %}
-
-This will create an view of all the cats' birthdays and their names called `by_birthday_and_name`.
-
-Sometimes the automatically generate map function might not be sufficient for more complicated queries. To customize, add the :map and :reduce functions when creating the view:
-
-{% highlight ruby %}
-view_by :tags,
-  :map =>
-    "function(doc) {
-      if (doc['model'] == 'Post' && doc.tags) {
-        doc.tags.forEach(function(tag){
-          emit(doc.tag, 1);
-        });
-      }
-    }",
-  :reduce =>
-    "function(keys, values, rereduce) {
-      return sum(values);
-    }"
-{% endhighlight %}
-
-Calling a view will return document objects by default, to get access to the raw CouchDB result add the `:raw => true` option to get a hash instead. Custom views can also be queried with `:reduce => true` to return reduce results. The default is to query with `:reduce => false`.
- 
-Views are generated (on a per-model basis) lazily on first-access. This means that if you are deploying changes to a view, the views for
-that model won't be available until generation is complete. This can take some time with large databases. Strategies are in the works.
+CouchRest Model has great support for views, and since version 1.1.0 we added support for a View objects that make accessing your data even easier.
 
 ### View Objects
 
-Since CouchRest Model 1.1.0 it is now possible to create views that return objects chainable objects, similar to those you'd find in the Sequel Ruby library or Rails 3's Arel. Heres an example of creating a few views:
+Since version 1.1.0 it has been possible to create views that return chainable objects, similar to those you'd find in the [sequel](http://sequel.rubyforge.org/) or Rails 3's Arel.
+
+View definitions are provided in a model's `design` block. This is a special region of the class where view object accessors are defined and will be stored in the model's design document. In the future, other types of design methods may also be supported.
+
+A view is defined by providing a view name to the `view` method. If no map function is provided, an attempt will be made to determine one for you based on the name. The following example shows this:
+
+{% highlight ruby %}
+# Define a new Post class with a design block
+class Post < CouchRest::Model::Base
+  property :name
+  design do
+    view :by_name
+  end
+end
+
+# The model should have a by_name method
+Post.respond_to?(:by_name) # => true
+
+# Request a set of posts ordered by name
+Post.by_name.count # => 23
+Post.by_name.all   # => posts ordered by name...
+{% endhighlight %}
+
+Following the example, the name of the view is provided as `by_name`. Couchrest model automatically determines that we want to create a view whose index contains the document's name field. If we wanted to create views based on more than one key, they can be separated with an `and`:
+
+{% highlight ruby %}
+# Define a new Post class with a design block and joint view
+class Post < CouchRest::Model::Base
+  property :name, String
+  property :date, Date
+  design do
+    view :by_date_and_name
+  end
+end
+{% endhighlight %}
+
+The following code section shows an example model covering several of the options supported by the view definitions.
 
 {% highlight ruby %}
 class Post < CouchRest::Model::Base
@@ -97,7 +77,7 @@ class Post < CouchRest::Model::Base
 end
 {% endhighlight %}
 
-You'll see that this new syntax requires all views to be defined inside a design block. Unlike the old version, the keys to be used in a query are determined from the name of the view, not the other way round. Acessing data is the fun part:
+Acessing data is the fun part:
 
 {% highlight ruby %}
 # Prepare a query:
@@ -187,5 +167,61 @@ end
 $ rails runner "CouchRestMigratin.update_all_design_docs"
 {% endhighlight %}
 
+
+## Using views the old fashioned way
+
+Here's an example of adding a view to our Cat class:
+
+{% highlight ruby %}
+class Cat < CouchRest::Model::Base
+  property :name, String
+  property :toys, [CatToy]
+
+  view_by :name
+end
+{% endhighlight %}
+
+The `view_by` method will create a view in the Cat's design document called "by_name". This will allow searches to be made for the Cat's name attribute. Calling `Cat.by_name` will send a query of to the database and return an array of all the Cat objects available. Internally, a map function is generated automatically and stored in CouchDB's design document for the current model, it'll look something like the following:
+
+{% highlight javascript %}
+function(doc) {
+  if (doc['couchrest-type'] == 'Cat' && doc['name']) {
+    emit(doc.name, null);
+  }
+}
+{% endhighlight %}
+
+By default, a special view called `all` is created and added to all couchrest models that allows you access to all the documents in the database that match the model. By default, these will be ordered by each documents id field.
+
+It is also possible to create views of multiple keys, for example:
+
+{% highlight ruby %}
+view_by :birthday, :name
+{% endhighlight %}
+
+This will create an view of all the cats' birthdays and their names called `by_birthday_and_name`.
+
+Sometimes the automatically generate map function might not be sufficient for more complicated queries. To customize, add the :map and :reduce functions when creating the view:
+
+{% highlight ruby %}
+view_by :tags,
+  :map =>
+    "function(doc) {
+      if (doc['model'] == 'Post' && doc.tags) {
+        doc.tags.forEach(function(tag){
+          emit(doc.tag, 1);
+        });
+      }
+    }",
+  :reduce =>
+    "function(keys, values, rereduce) {
+      return sum(values);
+    }"
+{% endhighlight %}
+
+Calling a view will return document objects by default, to get access to the raw CouchDB result add the `:raw => true` option to get a hash instead. Custom views can also be queried with `:reduce => true` to return reduce results. The default is to query with `:reduce => false`.
+ 
+Views are generated (on a per-model basis) lazily on first-access. This means that if you are deploying changes to a view, the views for
+that model won't be available until generation is complete. This can take some time with large databases. Strategies are in the works.
 
 

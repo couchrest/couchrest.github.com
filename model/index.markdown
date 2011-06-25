@@ -6,25 +6,33 @@ id: model_index
 
 # CouchRest Model
 
-CouchRest Models adds additional functionality to the standard CouchRest Document class such as
-setting properties, callbacks, typecasting, and validations.
+CouchRest Model adds additional functionality to the standard CouchRest Document. ActiveModel is used as a base and provides features such as setting properties, callbacks, typecasting, dirty tracking, and validations.
 
-Originally called ExtendedDocument, the new Model structure uses ActiveModel, part of Rails 3, 
-for validations and callbacks.
+## Instalation
 
-If your project is still running Rails 2.3, you'll have to continue using ExtendedDocument as 
-it is not possible to load ActiveModel into programs that do not use ActiveSupport 3.0.
-
-CouchRest Model is only properly tested on CouchDB version 1.0 or newer.
-
-*WARNING:* As of April 2011 and the release of version 1.1.0, the default model type key is 'model' instead of 'couchrest-type'. Simply updating your project will not work unless you migrate your data or set the configuration option in your initializers:
+Simply include the library in your Rails 3 (or 3.1) project's Gemfile:
 
 {% highlight ruby %}
-CouchRest::Model::Base.configure do |config|
-  config.model_type_key = 'couchrest-type'
+gem :couchrest_model, '~> 1.1.0'
+{% endhighlight %}
+
+After a quick `bundle install` you'll now be able to begin creating your CouchRest Models. For more details on configuring the database connection, see the [configuration section](/model/configuring.html).
+
+## Generating Models
+
+Generate your first model:
+
+{% highlight ruby %}
+rails generate model person
+{% endhighlight %}
+
+This will create a `app/models/person.rb` containing the most basic model definition:
+
+{% highlight ruby %}
+class Foo < CouchRest::Model::Base
 end
 {% endhighlight %}
 
-This is because CouchRest Model's are not couchrest specific and may be used in any other system such as a Javascript library, the model type should reflect this.
+From here you can now start to add [properties](/model/properties.html) to the model.
 
 

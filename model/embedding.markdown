@@ -1,19 +1,18 @@
 ---
 layout: default
-title: Casted Models
-id: model_casted_models
+title: Embedding Models
+id: model_embedding
 ---
 
-# Casted Models
+# Embedded or Nesting Models
 
-CouchRest Model allows you to take full advantage of CouchDB's ability to store complex 
-documents and retrieve them using the CastedModel module. Simply include the module in
-a Hash (or other model that responds to the `[]` and `[]=` methods) and set any properties
-you'd like to use. For example:
+The CouchRest Model `Embeddable` module allows you to take full advantage of CouchDB's ability to store complex
+documents and retrieve them. Simply include the module in a Class and set any properties you'd like to use.
+For example:
 
 {% highlight ruby %}
-class CatToy < Hash
-  include CouchRest::Model::CastedModel
+class CatToy
+  include CouchRest::Model::Embeddable
 
   property :name, String
   property :purchased, Date
@@ -29,14 +28,14 @@ end
 @cat.toys.first.name == 'mouse'
 {% endhighlight %}
 
-Any hashes sent to the property will automatically be converted:
+Any hashes sent to the property will be automatically converted:
 
 {% highlight ruby %}
 @cat.toys << {:name => 'catnip ball'}
 @cat.toys.last.is_a?(CatToy) # True!
 {% endhighlight %}
 
-To use your own classes they *must* be defined before the parent uses them otherwise 
+For obvious reasons, classes *must* be defined before the parent uses them, if not,
 Ruby will bring up a missing constant error. To avoid this, or if you have a really simple array of data
 you'd like to model, CouchRest Model supports creating anonymous classes:
 
@@ -44,7 +43,7 @@ you'd like to model, CouchRest Model supports creating anonymous classes:
 class Cat < CouchRest::Model::Base
   property :name, String
 
-  # define a property with a nested anonymous array of casted models
+  # define a property with a nested anonymous array of embeddable models
   property :toys do
     property :name, String
     property :rating, Integer
