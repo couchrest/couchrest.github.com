@@ -63,7 +63,7 @@ class Post < CouchRest::Model::Base
     view :tag_list,
       :map =>
         "function(doc) {
-          if (doc['model'] == 'Post' && doc.tags) {
+          if (doc['type'] == 'Post' && doc.tags) {
             doc.tags.forEach(function(tag){
               emit(doc.tag, 1);
             });
@@ -207,7 +207,7 @@ Sometimes the automatically generate map function might not be sufficient for mo
 view_by :tags,
   :map =>
     "function(doc) {
-      if (doc['model'] == 'Post' && doc.tags) {
+      if (doc['type'] == 'Post' && doc.tags) {
         doc.tags.forEach(function(tag){
           emit(doc.tag, 1);
         });

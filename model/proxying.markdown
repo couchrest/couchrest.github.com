@@ -18,11 +18,8 @@ class Company < CouchRest::Model::Base
   property :name
   property :slug
 
+  proxy_database_method :slug
   proxy_for :invoices
-
-  def proxy_database
-    @proxy_database ||= COUCHDB_SERVER.database!("project_#{slug}")
-  end
 end
 
 # Invoices belong to a company
@@ -50,5 +47,16 @@ Internally, all requests for invoices are passed through a model proxy. Aside fr
 basic methods and views, it also ensures that some of the more complex queries are supported
 such as validating for uniqueness and associations.
 
+The `proxy_database_method` defines the name of the method that should be called to return 
+the desired name of the database for the instance. The project's database prefix and suffix
+will be added if they are specified in the configuration. If you'd like to provide your own
+method for setting the database, simply override the `proxy_database` method so that a 
+CouchRest Database of your choosing is returned.
+
+For obvious reasons, it is not a good idea to use a variable that can change for the database
+name, so the object's id might be a reasonable choice.
+
+Deleting an proxy model will not automatically delete the associated database, you'd have to
+do this manually in a callback.
 
 
