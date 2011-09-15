@@ -1,4 +1,6 @@
-= Office CouchRest and CouchRest Model Website
+
+Oficial CouchRest and CouchRest Model Website
+----
 
 Generate using:
 
