@@ -34,7 +34,7 @@ class Person < CouchRest::Model::Base
 end
 {% endhighlight %}
 
-The `use_database` method tells the model which database it should use. This can be provided as a `CouchRest::Database` object or as simple string that will be concatenated to the connection prefix. See the [configuration section](/models/configuring.html) for more details.
+The `use_database` method tells the model which database it should use. This can be provided as a `CouchRest::Database` object or as simple string that will be concatenated to the connection prefix. See the [configuration section](/model/configuring.html) for more details.
 
 ## Document ids
 
