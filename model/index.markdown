@@ -13,7 +13,7 @@ CouchRest Model adds additional functionality to the standard CouchRest Document
 Simply include the library in your Rails 3 (or 3.1) project's Gemfile:
 
 {% highlight ruby %}
-gem :couchrest_model, '~> 1.1.0'
+gem :couchrest_model, '~> 1.2.0.beta'
 {% endhighlight %}
 
 After a quick `bundle install` you'll now be able to begin creating your CouchRest Models. For more details on configuring the database connection, see the [configuration section](/model/configuring.html).

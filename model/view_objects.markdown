@@ -10,7 +10,7 @@ CouchDB views can be quite difficult to get grips with at first as they are quit
 
 CouchRest Model has great support for views, and since version 1.1.0 we added support for a View objects that make accessing your data even easier.
 
-### View Objects
+### Definitions and Design Block
 
 Since version 1.1.0 it has been possible to create views that return chainable objects, similar to those you'd find in the [sequel](http://sequel.rubyforge.org/) or Rails 3's Arel.
 
@@ -126,25 +126,119 @@ Use pagination as follows:
 paginate @posts
 {% endhighlight %}
 
-### Design Documents and Views
 
-Views must be defined in a Design Document for CouchDB to be able to perform searches. Each model therefore must have its own Design Document. Deciding when to update the model's design doc is a difficult issue, as in production you don't want to be constantly checking for updates and in development maximum flexability is important. CouchRest Model solves this issue by providing the `auto_update_design_doc` configuration option and is true by default.
+### Multiple Design Documents
 
-Each time a view or other design method is requested a quick GET for the design will be sent to ensure it is up to date with the latest changes. Results are cached in the current thread for the complete design document's URL, including the database, to try and limit requests. This should be fine for most projects, but dealing with multiple sub-databases may require a different strategy.
+Since version 1.2.0, it is now possible to define multiple designs for a single model. Views can often take a long time to generate, especially if you have lots of documents, your application will practically lock-up until all the indexes have updated. It makes sense therefore to try and avoid updating designs where a delay in execution may be significant and effect responses to users.
+
+Creating multiple designs helps differenciate between essential views, like finding all documents by date or joins which are critical to the functionality of the app, and non-essential views such as for statistics or testing purposes. Changes to the critical design can be avoided, and the stats can be updated whenever required. Here's how:
+
+
+{% highlight ruby %}
+class Post < CouchRest::Model::Base
+  property :title
+  property :body
+  property :posted_at, DateTime
+  property :tags, [String]
+
+  design do
+    view :by_title
+    view :by_posted_at_and_title
+  end
+
+  design :tags do
+    view :tag_list,
+      :map =>
+        "function(doc) {
+          if (doc['#{model_type_key}'] == 'Post' && doc.tags) {
+            doc.tags.forEach(function(tag){
+              emit(doc.tag, 1);
+            });
+          }
+        }",
+      :reduce => "function(k, v, r) { return sum(v); }"
+    end
+  end
+end
+{% endhighlight %}
+
+The second design block includes the `:tags` argument so that it will be created in its own document in CouchDB called `_design/Post_tags`. Just as with a normal design block, each view will have its own method created in the model without a prefix, ready to be called.
+
+
+
+### Inheriting Designs
+
+Another new feature in 1.2.0. When a Couchrest Model is inherited, it's design blocks will be automatically copied to the new child model. Each model stores an array of all the design doc definitions that have come before it so they are ready to be provided to a new model and re-interpreted. The only thing to be careful about in this scenario is ensuring that your own view map definitions do not fix the document type (generally a good idea anyway).
+
+Heres an example of defining a simplified example of when this might be useful:
+
+
+{% highlight ruby %}
+class User < CouchRest::Model::Base
+  property :name,     String
+  property :email,    String
+  property :password, String
+
+  timestamps!
+
+  design do
+    view :by_email
+    view :by_name,
+      :map => "
+        function(d) {
+          if (d['type'] == '#{model}' && d['name']) { emit(d.name, d['email']); }
+        }
+      "
+  end
+end
+
+class Admin < Mammal
+  property :role
+  design do
+    view :by_role
+  end
+end
+
+# Some basic queries
+Admin.by_role.key('manager')  # find all admins with manager role
+Admin.by_email.key('foo@bar.com').first # Find admin by email address
+{% endhighlight %}
+
+Of course, CouchDB views are not like SQL queries, so we cannot get a list of all users and admins without creating our own map method:
+
+{% highlight ruby %}
+design do
+  view :by_email, :map => "
+    function(d) {
+      t = d['type'];
+      if ((t == 'User' || t == 'Admin') && d['email']) {
+        emit(d.email, 1);
+      }
+    }"
+{% endhighlight %}
+
+Given that this is such a new feature, expect changes and refinements to be made to cope with different environments.
+
+
+### View Migrations
+
+Deciding when to update the model's design doc is a difficult issue. In production you don't want to be constantly checking for updates and in development maximum flexability is important. CouchRest Model solves this issue by providing the `auto_update_design_doc` configuration option, set true by default.
+
+When a view is requested a quick GET for the design document will be sent to ensure it is up to date with the latest version defined in the model. Results are cached in the current thread for the complete design document's URL, including the database, to try and limit requests. This should be fine for most projects, but dealing with multiple sub-databases may require a different strategy.
 
 Setting the option to false will require a manual update of each model's design doc whenever you know a change has happened. This will be useful in cases when you do not want CouchRest Model to interfere with the views already store in the CouchRest database, or you'd like to deploy your own update strategy. Here's an example of a module that will update all submodules:
 
 {% highlight ruby %}
 module CouchRestMigration
-  def self.update_design_docs
-    CouchRest::Model::Base.subclasses.each{|klass| klass.save_design_doc! if klass.respond_to?(:save_design_doc!)}
+  def self.update_all_design_docs
+    CouchRest::Model::Base.subclasses.each{|klass| klass.design_doc.sync! if klass.respond_to?(:design_doc)}
   end
 end
 
 # Running this from your applications initializers would be a good idea,
 # for example in Rail's application.rb or environments/production.rb:
 config.after_initialize do
-  CouchRestMigration.update_design_docs
+  CouchRestMigration.update_all_design_docs
 end
 {% endhighlight %}
 
@@ -159,7 +253,7 @@ module CouchRestMigration
     end
   end
   def self.update_design_docs(db)
-    CouchRest::Model::Base.subclasses.each{|klass| klass.save_design_doc!(db) if klass.respond_to?(:save_design_doc!}
+    CouchRest::Model::Base.subclasses.each{|klass| klass.design_doc.sync!(db) if klass.respond_to?(:save_design_doc!}
   end
 end
 
@@ -168,60 +262,10 @@ $ rails runner "CouchRestMigratin.update_all_design_docs"
 {% endhighlight %}
 
 
-## Using views the old fashioned way
+### What happened to the old view methods?
 
-Here's an example of adding a view to our Cat class:
+They been deleted. :)
 
-{% highlight ruby %}
-class Cat < CouchRest::Model::Base
-  property :name, String
-  property :toys, [CatToy]
-
-  view_by :name
-end
-{% endhighlight %}
-
-The `view_by` method will create a view in the Cat's design document called "by_name". This will allow searches to be made for the Cat's name attribute. Calling `Cat.by_name` will send a query of to the database and return an array of all the Cat objects available. Internally, a map function is generated automatically and stored in CouchDB's design document for the current model, it'll look something like the following:
-
-{% highlight javascript %}
-function(doc) {
-  if (doc['couchrest-type'] == 'Cat' && doc['name']) {
-    emit(doc.name, null);
-  }
-}
-{% endhighlight %}
-
-By default, a special view called `all` is created and added to all couchrest models that allows you access to all the documents in the database that match the model. By default, these will be ordered by each documents id field.
-
-It is also possible to create views of multiple keys, for example:
-
-{% highlight ruby %}
-view_by :birthday, :name
-{% endhighlight %}
-
-This will create an view of all the cats' birthdays and their names called `by_birthday_and_name`.
-
-Sometimes the automatically generate map function might not be sufficient for more complicated queries. To customize, add the :map and :reduce functions when creating the view:
-
-{% highlight ruby %}
-view_by :tags,
-  :map =>
-    "function(doc) {
-      if (doc['type'] == 'Post' && doc.tags) {
-        doc.tags.forEach(function(tag){
-          emit(doc.tag, 1);
-        });
-      }
-    }",
-  :reduce =>
-    "function(keys, values, rereduce) {
-      return sum(values);
-    }"
-{% endhighlight %}
-
-Calling a view will return document objects by default, to get access to the raw CouchDB result add the `:raw => true` option to get a hash instead. Custom views can also be queried with `:reduce => true` to return reduce results. The default is to query with `:reduce => false`.
- 
-Views are generated (on a per-model basis) lazily on first-access. This means that if you are deploying changes to a view, the views for
-that model won't be available until generation is complete. This can take some time with large databases. Strategies are in the works.
+In older bits of code, you might find references to `view_by` definitions and calls to `has_view?` and just `view`. These methods have now all been removed since version 1.2 along with all the missing method helpers that went with them. This is due to new focus on design documents and to simplify usage.
 
 
