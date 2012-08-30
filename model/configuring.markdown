@@ -105,7 +105,7 @@ config.connection = {
 }
 {% endhighlight %}
 
-If you're couchrest model is used in a Rails project, the prefix option is automatically overriden using the project's name determined from Rails' `config/application.rb` file. If a name cannot be determined or you're not developing a Rails project, 'couchrest' is the default database prefix.
+If your couchrest model is used in a Rails project, the prefix option is automatically overriden using the project's name determined from Rails' `config/application.rb` file. If a name cannot be determined or you're not developing a Rails project, 'couchrest' is the default database prefix.
 
 The prefix and suffix options are used to form a database name by combining them using the join option. The most basic option just uses the prefix as the database name, however if you define a suffix and models that define they're own database, more complex names can be used.
 
