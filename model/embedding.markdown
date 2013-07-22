@@ -66,7 +66,7 @@ end
 @cat.toys.first.rating = 2
 {% endhighlight %}
 
-If you prefer a more traditional usage of blocks and avoid the magical `instance_eval`, a block can be provided with a paremeter. This might be useful if you need to access a variable outside of the block as the scope will not have been altered.
+If you prefer a more traditional usage of blocks and avoid the magical `instance_eval`, a block can be provided with a parameter. This might be useful if you need to access a variable outside of the block as the scope will not have been altered.
 
 {% highlight ruby %}
 class Cat < CouchRest::Model::Base
