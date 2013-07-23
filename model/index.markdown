@@ -8,7 +8,7 @@ id: model_index
 
 CouchRest Model adds additional functionality to the standard CouchRest Document. ActiveModel is used as a base and provides features such as setting properties, callbacks, typecasting, dirty tracking, and validations.
 
-## Instalation
+## Installation
 
 Simply include the library in your Rails 3 (or 3.1) project's Gemfile:
 
@@ -29,7 +29,7 @@ rails generate model person
 This will create a `app/models/person.rb` containing the most basic model definition:
 
 {% highlight ruby %}
-class Foo < CouchRest::Model::Base
+class Person < CouchRest::Model::Base
 end
 {% endhighlight %}
 
