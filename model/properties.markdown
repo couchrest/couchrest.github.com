@@ -7,7 +7,7 @@ id: model_properties
 # CouchRest Model Properties
 
 A property is the definition of an attribute, it describes what the attribute is called, how it should
-be type casted and other options such as it's default value. These replace your typical 
+be type cast and other options such as it's default value. These replace your typical 
 `add_column` methods found in relational database migrations.
 
 To define a property, simply call the `property` class method in your model definition:
@@ -41,7 +41,7 @@ def name=(value)
 end
 {% endhighlight %}
 
-These can be overwriten in your code should you want to perform any special treatment of an attribute. The `#read_attribute` and `#write_attribute` methods perform any typecasting required.
+These can be overwritten in your code should you want to perform any special treatment of an attribute. The `#read_attribute` and `#write_attribute` methods perform any typecasting required.
 
 Here are a few examples of properties in use:
 
@@ -81,7 +81,7 @@ class Cat < CouchRest::Model::Base
 end
 {% endhighlight %}
 
-In CouchRest, any class can be used as a property type as long as it has a to_json method. Problems however may arrise when trying to load the stored data back into your model, most classes cannot be restored from a Hash with JSON values. To get around this problem, the [`CastedModel` include](/model/casted_models.html) allows you to create complex embdedded documents that will be loaded correctly.
+In CouchRest, any class can be used as a property type as long as it has a to_json method. Problems however may arise when trying to load the stored data back into your model, most classes cannot be restored from a Hash with JSON values. To get around this problem, the [`CastedModel` include](/model/casted_models.html) allows you to create complex embededded documents that will be loaded correctly.
 
 Properties do not need to be defined with a type or class, but in this case no type casting will be performed when loading the model, so you'll always get back whatever the `to_json` method converted your property into:
 
