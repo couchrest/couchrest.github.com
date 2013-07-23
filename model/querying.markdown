@@ -7,7 +7,7 @@ id: model_queries
 
 # Simple Queries
 
-CouchRest Model supports a few basic queries for retrieving your data from the database. For more sophisticated ways of accesing your data, see the [views section](/model/view_objects.html).
+CouchRest Model supports a few basic queries for retrieving your data from the database. For more sophisticated ways of accessing your data, see the [views section](/model/view_objects.html).
 
  * [`Model.all`](#all)
  * [`Model.count`](#count)
