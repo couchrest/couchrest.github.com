@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Database Persistance
+title: Database Persistence
 no_comments: true
-id: model_persistance
+id: model_persistence
 ---
 
-# Persistance
+# Persistence
 
 As you'd expect, CouchRest Model supports all the standard [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations you're used to in other object mappers. The key methods are:
 
