@@ -12,7 +12,7 @@ CouchRest Model has great support for views, and since version 1.1.0 we added su
 
 ### Definitions and Design Block
 
-Since version 1.1.0 it has been possible to create views that return chainable objects, similar to those you'd find in the [sequel](http://sequel.rubyforge.org/) or Rails 3's Arel.
+Since version 1.1.0 it has been possible to create views that return chain-able objects, similar to those you'd find in the [sequel](http://sequel.rubyforge.org/) or Rails 3's Arel.
 
 View definitions are provided in a model's `design` block. This is a special region of the class where view object accessors are defined and will be stored in the model's design document. In the future, other types of design methods may also be supported.
 
