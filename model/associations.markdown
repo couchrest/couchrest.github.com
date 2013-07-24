@@ -14,7 +14,7 @@ collection_of :tags
 {% endhighlight %}
 
 
-This is a somewhat controvesial feature of CouchRest Model that some document database purists may cringe at. CouchDB does not yet povide many features to support relationships between documents but the fact of that matter is that its a very useful paradigm for modelling data systems.
+This is a somewhat controversial feature of CouchRest Model that some document database purists may cringe at. CouchDB does not yet povide many features to support relationships between documents but the fact of that matter is that its a very useful paradigm for modelling data systems.
 
 In the near future we hope to add support for a `has_many` relationship that takes of the _Linked Documents_ feature that arrived in CouchDB 0.11.
 
