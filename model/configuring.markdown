@@ -6,7 +6,7 @@ id: model_configuring
 
 # Configuring
 
-CouchRest Model supports several configuration options coverting connection settings, environment, and special object modelling options. They can be set either for the entire project or for a specific model of your chosing.
+CouchRest Model supports several configuration options coverting connection settings, environment, and special object modelling options. They can be set either for the entire project or for a specific model of your choosing.
 
 To configure globally, provide something similar to the following in your projects initializers or environments:
 
