@@ -8,7 +8,7 @@ id: model_dirty_tracking
 
 Since version 1.1.0, CouchRest Model has support for dirty tracking based on the support modules provided by ActiveModel. This works as you'd expect by allow special method calls to check if a specific attribute or anything in the object has changed.
 
-Unlike a relational database that only has to deal with two dimensional tables, CouchRest Model supports dirty tracking on nested models. Changes on a deaply nested object will be passed through the parent properties and documents until reaching the base document.
+Unlike a relational database that only has to deal with two dimensional tables, CouchRest Model supports dirty tracking on nested models. Changes on a deeply nested object will be passed through the parent properties and documents until reaching the base document.
 
 ## Viewing and checking for changes
 
