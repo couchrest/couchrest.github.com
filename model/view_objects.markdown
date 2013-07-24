@@ -131,7 +131,7 @@ paginate @posts
 
 Since version 1.2.0, it is now possible to define multiple designs for a single model. Views can often take a long time to generate, especially if you have lots of documents, your application will practically lock-up until all the indexes have updated. It makes sense therefore to try and avoid updating designs where a delay in execution may be significant and effect responses to users.
 
-Creating multiple designs helps differenciate between essential views, like finding all documents by date or joins which are critical to the functionality of the app, and non-essential views such as for statistics or testing purposes. Changes to the critical design can be avoided, and the stats can be updated whenever required. Here's how:
+Creating multiple designs helps differentiate between essential views, like finding all documents by date or joins which are critical to the functionality of the app, and non-essential views such as for statistics or testing purposes. Changes to the critical design can be avoided, and the stats can be updated whenever required. Here's how:
 
 
 {% highlight ruby %}
