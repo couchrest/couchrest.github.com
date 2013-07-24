@@ -7,7 +7,7 @@ id: model_proxying
 # Proxying
 
 CouchDB makes it really easy to create databases on the fly, so easy in fact that it is perfectly
-feasable to have one database per user or per company or per whatever makes sense to split into
+feasible to have one database per user or per company or per whatever makes sense to split into
 its own individual database. CouchRest Model now makes it really easy to support this scenario
 using the proxy methods. Here's a quick example:
 
