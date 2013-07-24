@@ -222,7 +222,7 @@ Given that this is such a new feature, expect changes and refinements to be made
 
 ### View Migrations
 
-Deciding when to update the model's design doc is a difficult issue. In production you don't want to be constantly checking for updates and in development maximum flexability is important. CouchRest Model solves this issue by providing the `auto_update_design_doc` configuration option, set true by default.
+Deciding when to update the model's design doc is a difficult issue. In production you don't want to be constantly checking for updates and in development maximum flexibility is important. CouchRest Model solves this issue by providing the `auto_update_design_doc` configuration option, set true by default.
 
 When a view is requested a quick GET for the design document will be sent to ensure it is up to date with the latest version defined in the model. Results are cached in the current thread for the complete design document's URL, including the database, to try and limit requests. This should be fine for most projects, but dealing with multiple sub-databases may require a different strategy.
 
