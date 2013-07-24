@@ -112,7 +112,7 @@ end
 
 #### Pagination
 
-The view objects have built in support for pagination based on the [kaminari](https://github.com/amatsuda/kaminari) gem. Methods are provided to match those required by the library to peform pagination.
+The view objects have built in support for pagination based on the [kaminari](https://github.com/amatsuda/kaminari) gem. Methods are provided to match those required by the library to perform pagination.
 
 For your view to support paginating the results, it must use a reduce function that provides a total count of the documents in the result set. By default, auto-generated views include a reduce function that supports this.
 
