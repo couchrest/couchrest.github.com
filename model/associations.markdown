@@ -42,7 +42,7 @@ kitty = Cat.find_by_name "Felix"
 kitty.mother.name == 'Sophie'
 {% endhighlight %}
 
-Belongs_to accepts a few options to add a bit more felxibility:
+Belongs_to accepts a few options to add a bit more flexibility:
 
 * `:class_name` - the camel case string name of the class used to load the model.
 * `:foreign_key` - the name of the property to use instead of the attribute name with `_id` on the end.
