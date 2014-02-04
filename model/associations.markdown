@@ -35,7 +35,7 @@ kitty = Cat.new(:name => "Felix")
 kitty.mother = Mother.find_by_name('Sophie')
 {% endhighlight %}
 
-Providing a object to the setter, `mother` in the example will automagically update the `mother_id` attribute. Retrieving the data later is just as expected:
+Providing a object to the setter, `mother` in the example will automatically update the `mother_id` attribute. Retrieving the data later is just as expected:
 
 {% highlight ruby %}
 kitty = Cat.find_by_name "Felix"
