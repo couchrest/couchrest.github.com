@@ -10,7 +10,7 @@ CouchRest is composed of two libraries; [couchrest](/couchrest/index.html) a low
 
 To get started, you'll probably want to have a look at the [couchrest model introduction](/model/index.html). This will help you access CouchDB from your rails project and get you modeling in a few short steps.
 
-*NOTE:* This documentation is based on the 1.1.0 release of couchrest and couchrest model made on the 25 of June 2011.
+*NOTE:* This documentation is based on the 2.0 release of couchrest and 2.2.0 of couchrest model made on July and August 2016.
 
 ## Contributing
 
